@@ -1,0 +1,8 @@
+model the construction of a building in Java
+>= 3 classes
+>= 1 interface
+>= 1 abstract class
+user every access modifier
+overriding and overloading
+
+hr@revature.com
