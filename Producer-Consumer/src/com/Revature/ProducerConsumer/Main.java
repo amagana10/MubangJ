@@ -8,8 +8,6 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Map<String, Integer> basket = new HashMap<>();
-		Map<String, Integer> basket2 = new HashMap<>();
-		basket.put("item", 20);
 		
 		Producer producer = new Producer(basket);
 		Consumer consumer = new Consumer(basket);
@@ -17,15 +15,17 @@ public class Main {
 		Thread producerThread = new Thread(producer);
 		Thread consumerThread = new Thread(consumer);
 		
-		producerThread.start();
+		producerThread.start();	
+		consumerThread.start();
 		
 		try {
 			producerThread.join();
+			consumerThread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		consumerThread.start();
-		
+		producer.add();
+				
 	}
 }
