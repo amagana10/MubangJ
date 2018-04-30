@@ -4,40 +4,42 @@ import java.util.Map;
 
 public class Producer implements Runnable {
 	
-	private Map<String,Integer> Basket;
+	private Map<String,Integer> basket;
 	
 	public Producer(Map<String, Integer> basket) {
 		super();
-		Basket = basket;
+		this.basket = basket;
 	}
 	
 	
 	public Map<String, Integer> getBasket() {
-		return Basket;
+		return basket;
 	}
+	
+	public void add() {
+		System.out.println((100 - basket.get("item")) + " items were added.");
+		basket.put("item", 100);
+	}
+	
 
 	@Override
 	public void run() {
 		
-//		synchronized(this) {
-			if (Basket.isEmpty()) {
+			if (basket.isEmpty()) {
 				System.out.println("100 items added to the basket");
-				Basket.put("item", 100);
-//				notify();
+				basket.put("item", 100);
 				return;
 				
-			} else if(Basket.get("item") < 100) {
-				System.out.println((100 - Basket.get("item")) + " items were added.");
-				Basket.put("item", 100);
-//				notify();
+			} else if(basket.get("item") < 100) {
+				System.out.println((100 - basket.get("item")) + " items were added.");
+				basket.put("item", 100);
 				return;
 			}
-			
-//		}
-
+		
 				
 	}
 	
+
 	
 
 }
