@@ -53,7 +53,6 @@ public class Main {
 					System.out.println("Passwords must be the same\n");
 				}
 				
-				// TODO write object (RegisterUser) to query to database to save username and password
 				
 				register = new RegisterUser(username, password);
 				
@@ -76,6 +75,7 @@ public class Main {
 			
 		System.out.println("You have successfully logged in " + "\n");
 		
+//		TODO
 //		if (superUser != null) {
 		
 //			System.out.println("You are a super user\n");
