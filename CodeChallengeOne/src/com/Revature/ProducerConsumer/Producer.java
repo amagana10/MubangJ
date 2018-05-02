@@ -34,12 +34,6 @@ public class Producer implements Runnable {
 				System.out.println((100 - basket.get("item")) + " items were added.");
 				basket.put("item", 100);
 				return;
-			}
-		
-				
+			}		
 	}
-	
-
-	
-
 }
