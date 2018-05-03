@@ -1,10 +1,17 @@
 package com.Revature.Bank;
 
 public class SuperUser {
-
-	public SuperUser(String username, String password) {
-
+	
+	Login login;
+	
+	public SuperUser(Login login) {
+		this.login = login;
 	}
 	
+	public String getUsername() {
+		return login.getUsername();
+	}
+	
+	// view, create, update, and delete all users
 	
 }

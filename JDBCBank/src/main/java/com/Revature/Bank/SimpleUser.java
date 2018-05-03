@@ -7,8 +7,8 @@ import java.sql.Statement;
 
 public class SimpleUser {
 	
-	private String username;
-	private String password;
+	private Login login;
+//	private ResultSet userInfo;
 	
 //	Connection conn = DriverManager.getConnection(password, password, password);
 //	
@@ -17,11 +17,15 @@ public class SimpleUser {
 //	ResultSet accountInfo = stmt.executeQuery("SELECT AccountName, money FROM Users WHERE UserId =" + userInfo.getString(0));
 
 	
-	public SimpleUser(String username, String password) {
-		this.username = username;
-		this.password = password;
+	public SimpleUser(Login login) {
+		this.login = login;
 	}
 	
+	public String getUsername() {
+		return login.getUsername();
+	}
+
+
 	public void viewAllAccounts() {
 //		TODO
 		// query accounts database for all accounts user owns
@@ -66,7 +70,7 @@ public class SimpleUser {
 		return false;
 	}
 	
-	public boolean switchAccounts() {
+	public boolean accessAccount(String accountName) {
 //		TODO
 		System.out.println("");
 		return false;

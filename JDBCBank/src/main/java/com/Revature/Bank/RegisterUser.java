@@ -15,5 +15,19 @@ public class RegisterUser {
 		this.username = username;
 		this.password = password;
 	}
+	
+	// TODO write method that checks if username already exists
+	
+	public boolean userExist() {
+		return false;
+	}
+	
+	public String registerResult() {
+		if (userExist()) {
+			return "Account Successfully Created!\n";
+		} else {
+			return "The user already exist";
+		}
 		
+	}
 }

@@ -11,7 +11,7 @@ public class Login {
 
 	private String username;
 	private String password;
-	private final String QUERY_USERS_TABLE = "SELECT UserId, username,superUser FROM Users WHERE username =" + username + ", AND password=" + password;
+//	private final String QUERY_USERS_TABLE = "SELECT UserId, username,superUser FROM Users WHERE username =" + username + ", AND password=" + password;
 	
 	
 	public Login(String username, String password) {
@@ -20,6 +20,14 @@ public class Login {
 		this.password = password;
 	}
 	
+	
+	
+	public String getUsername() {
+		return username;
+	}
+
+
+
 	//TODO
 	private Connection conn;
 //	try {
