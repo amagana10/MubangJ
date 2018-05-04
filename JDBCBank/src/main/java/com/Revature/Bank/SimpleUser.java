@@ -8,6 +8,7 @@ import java.sql.Statement;
 public class SimpleUser {
 	
 	private Login login;
+	private int money;
 //	private ResultSet userInfo;
 	
 //	Connection conn = DriverManager.getConnection(password, password, password);
@@ -22,7 +23,7 @@ public class SimpleUser {
 	}
 	
 	public String getUsername() {
-		return login.getUsername();
+		return login.getUsernameById();
 	}
 
 

@@ -9,7 +9,7 @@ public class SuperUser {
 	}
 	
 	public String getUsername() {
-		return login.getUsername();
+		return login.getUsernameById();
 	}
 	
 	// view, create, update, and delete all users

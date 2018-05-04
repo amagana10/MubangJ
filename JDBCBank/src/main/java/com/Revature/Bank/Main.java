@@ -28,7 +28,7 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		
 		do {	
-			System.out.println("Do you have an account?");
+			System.out.println("Do you have an account? (yes/y or no/n)");
 			yesOrNo = sc.nextLine();
 
 			if(yesOrNo.toLowerCase().equals("yes") || yesOrNo.toLowerCase().equals("y")) {
@@ -42,9 +42,16 @@ public class Main {
 					
 					login = new Login(username, password);
 					
-					if (!login.loggedIn()) System.out.println("The username or password entered is incorrect. Please try again.\n");
+					try {
+						if (!login.isLoggedIn()) throw new InvalidLoginException();
+						
+					} catch (InvalidLoginException e) {
+						e.getMessage();
+					}
 					
-				} while (!login.loggedIn());
+					if (!login.isLoggedIn()) System.out.println("The username or password entered is incorrect. Please try again.\n");
+					
+				} while (!login.isLoggedIn());
 					
 			} else if (yesOrNo.equals("no") || yesOrNo.equals("n")) {
 					
@@ -105,7 +112,7 @@ public class Main {
 				System.out.println("\t(1) to create a new account.\n "
 						+ "\t(2) to access an existing account.\n"
 						+ "\t(3) to delete an account that has a balance of 0.00.\n"
-						+ "\t(4) to deposit money in an existing account."
+						+ "\t(4) to deposit money in an existing account.\n"
 						+ "\t(5) to withrdraw money from an existing account.\n"
 						+ "\t(6) to view the transaction history of an account.\n"
 						+ "\t(7) to logout.");
