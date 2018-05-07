@@ -2,27 +2,26 @@ package com.Revature.Tables;
 
 public class Department {
 	
-	private int departmentId;
 	private String departmentName;
+	private double avgSalary;
+	private int doesIdExist;
 	
-	public Department(int departmentId, String departmentName) {
+	public Department(String departmentName, double avgSalary, int doesIdExist) {
 		super();
-		this.departmentId = departmentId;
 		this.departmentName = departmentName;
+		this.avgSalary = avgSalary;
 	}
 	
-	public int getDepartmentId() {
-		return departmentId;
-	}
-	public void setDepartmentId(int departmentId) {
-		this.departmentId = departmentId;
-	}
 	public String getDepartmentName() {
 		return departmentName;
 	}
-	public void setDepartmentName(String departmentName) {
-		this.departmentName = departmentName;
+
+	public double getAvgSalary() {
+		return avgSalary;
 	}
-	
-	
+
+	public int getDoesIdExist() {
+		return doesIdExist;
+	}	
+		
 }
