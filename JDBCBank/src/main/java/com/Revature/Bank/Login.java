@@ -6,77 +6,76 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Login implements LoginDao {
+import com.Revature.Dao.ConnectionUtil;
+import com.Revature.Dao.UserDao;
+import com.Revature.Dao.UserDaoImpl;
+import com.Revature.Exceptions.UserDoesNotExistException;
+import com.Revature.Tables.User;
+
+public class Login {
 	
 
 	private String username;
 	private String password;
-	private int userId;
 	private String superUser;
-	private String filename = "connection.properties";
 	
+	private User user;	
+	private UserDao userDao;
 	
 	public Login(String username, String password) {
 		super();
+		
 		this.username = username;
-		this.password = password;
+		this.password = password;	
+		this.userDao = new UserDaoImpl();
+		this.user = userDao.getUserByName(username);
+		
 	}
 	
-	@Override
 	public String getUsername() {
 		return username;
 	}
 	
-	@Override
 	public boolean isLoggedIn() {
-		PreparedStatement pstmt = null;
-		ResultSet userInfo = null;
+				
+		try {
+			if (user == null) {
+				throw new UserDoesNotExistException();
+			} 
+			
+		} catch (UserDoesNotExistException e) {
+			e.getMessage();
+			return false;
+		}
 		
-		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
-
-			// use a prepared statement
-			String sql = "SELECT USER_ID, USER_NAME, USER_PASSWORD, SUPERUSER FROM USERS WHERE USER_NAME = ? AND USER_PASSWORD = ?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,this.username);
-			pstmt.setString(2, this.password);
-			userInfo = pstmt.executeQuery();
-			
-			if (userInfo.next()) {
-				this.username = userInfo.getString("USER_NAME");
-				this.userId = userInfo.getInt("USER_ID");
-				this.superUser = userInfo.getString("SUPERUSER");
-				return true;
-			} else {
-				return false;
-			}
-			
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch(IOException e) {
-			e.printStackTrace();
+		if (!user.getPassword().equals(password)) {
+			System.out.println("The username or password you have entered does not exist. Please try again.\n");
+			return false;
+		}
+	
+		return true;		
+	}
+	
+	public boolean superUser() {
+		this.superUser = user.getSuperUser();
+		if (this.superUser == null) {
+			return false;
+		} 
+		
+		if (this.superUser.equals("y")) {
+			return true;
 		}
 		
 		return false;
 	}
 
-
-	@Override
-	public int getUsernameById() {
-		
-		return this.userId;
-	}	
-	
-	@Override
-	public boolean superUser() {
-		if (this.superUser.equals("n")) return true;
-		return false;
+	public UserDao getUserDao() {
+		return userDao;
 	}
 
+	public User getUser() {
+		return user;
+	}
 
-
-	
-
-	
 	
 }

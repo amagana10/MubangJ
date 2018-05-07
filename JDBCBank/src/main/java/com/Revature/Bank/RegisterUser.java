@@ -1,25 +1,41 @@
 package com.Revature.Bank;
 
-public class RegisterUser {
-	
-//	Connection conn = DriverManager.getConnection(password, password, password);
-//	
-//	Statement stmt = conn.createStatement();
-//	ResultSet registerUser = stmt.executeQuery("INSERT INO USERS (username, password);
+import java.util.Arrays;
+import java.util.List;
 
-	String username;
-	String password;
+import com.Revature.Dao.UserDaoImpl;
+import com.Revature.Exceptions.UserDoesNotExistException;
+import com.Revature.Tables.User;
+
+public class RegisterUser {
+
+	private String username;
+	private String password;
+	private UserDaoImpl userDao = new UserDaoImpl();
+	private User user;
 	
 	public RegisterUser(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;
 	}
-	
-	// TODO write method that checks if username already exists
-	
+		
 	public boolean userExist() {
+		List<User> users = userDao.getUsers();
+		for (User user : users) {
+			if(user.getUsername().equals(username)) {
+				return false;
+			}
+		}
+		
+		userDao.insertUser(username, password);
 		return false;
+//		user = userDao.getUserByName(username);
+//		
+//		if (user == null) {
+//			return true;
+//		}
+//		return false;
 	}
 	
 	public String registerResult() {

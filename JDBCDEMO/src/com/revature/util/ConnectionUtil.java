@@ -1,4 +1,4 @@
-package com.Revature.Bank;
+package com.revature.util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

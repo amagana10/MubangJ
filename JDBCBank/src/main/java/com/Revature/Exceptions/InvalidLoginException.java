@@ -1,9 +1,9 @@
-package com.Revature.Bank;
+package com.Revature.Exceptions;
 
 public class InvalidLoginException extends Exception {
 
 	public InvalidLoginException() {
-		super("Invalid Username or Password");
+		super("Invalid Username or Password.\n");
 		// TODO Auto-generated constructor stub
 	}
 

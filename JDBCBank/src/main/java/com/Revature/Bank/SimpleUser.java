@@ -4,92 +4,138 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DecimalFormat;
+import java.util.List;
+
+import com.Revature.Dao.AccountDao;
+import com.Revature.Dao.AccountDaoImpl;
+import com.Revature.Dao.TransactionDao;
+import com.Revature.Dao.TransactionDaoImpl;
+import com.Revature.Dao.UserDao;
+import com.Revature.Tables.Account;
+import com.Revature.Tables.Transaction;
+import com.Revature.Tables.User;
 
 public class SimpleUser {
 	
 	private Login login;
-	private int money;
-//	private ResultSet userInfo;
-	
-//	Connection conn = DriverManager.getConnection(password, password, password);
-//	
-//	Statement stmt = conn.createStatement();
-//	ResultSet userInfo = stmt.executeQuery("SELECT UserId, username FROM Users WHERE username =" + username + ", AND password=" + password);
-//	ResultSet accountInfo = stmt.executeQuery("SELECT AccountName, money FROM Users WHERE UserId =" + userInfo.getString(0));
-
+	private User user;
+	private UserDao userDao;
+	private AccountDao accountDao = new AccountDaoImpl();
+	private TransactionDao transactionDao = new TransactionDaoImpl();
 	
 	public SimpleUser(Login login) {
 		this.login = login;
+		userDao = login.getUserDao();
+		user = login.getUser();
 	}
-	
-	public String getUsername() {
-		return login.getUsernameById();
-	}
-
 
 	public void viewAllAccounts() {
-//		TODO
-		// query accounts database for all accounts user owns
-		//do for loop on account and print out account.accountName
+		 DecimalFormat df = new DecimalFormat("#.00");
 		
-		System.out.println("You have " + "amount" + " in this account");
-		System.out.println("\n");
+		List<Account> accounts = accountDao.getAccounts(user.getId());
+		for (Account account: accounts) {
+			System.out.println("\tYou have " + "$" + df.format(account.getAmount()) + " in " + account.getAccountName() + "\n");
+		}		
 	}
 	
 	public boolean createAccount(String accountName) {
-//		TODO
-		System.out.println("");
-		return false;
+		
+		boolean inserted = accountDao.insertAccount(user.getId(), accountName, 0.00);
+		
+		if(inserted) {
+			System.out.println("Created New Account: " + accountName);
+			transactionDao.insertTransaction(user.getId(), accountName, 0.00);
+		} else {
+			System.out.println("Error creating account: " + accountName);
+		}
+		return inserted;
 	}
 	
 	public boolean deleteAccount(String accountName) {
-//		TODO
-		// check if there is no money in account
-		
-		System.out.println("You have deleted " + accountName +"\n");
-		return false;
-	}
-	
-	public boolean withdraw(String accountName, int amount) {
-//		TODO
-//		if (amount > accountInfo.get("money")) {
-//			System.out.println("The amount you want to withdraw, exceeds the amount you have in your bank account.");
-//		}
-		
-//		stmt.executeQuery("UPDATE Accounts (money) SET (money = money - " + amount + ") WHERE UserId = " + userInfo.("UserId") + " AND AccountName = " + accountName);
-		
-		System.out.println("\\033[31m You have withdrawn " + amount + "\n");
-		return false;
-	}
-	
-	public boolean deposit(String accountName, int amount) {
-//		TODO
-		
-//		stmt.executeQuery("UPDATE Accounts (money) SET (money = money + " + amount + ") WHERE UserId = " + userInfo.("UserId") + " AND AccountName = " + accountName);
 
-		System.out.println("\\033[32m You have deposited " + amount + "\n");
+		boolean didItWork = accountDao.deleteAccount(user.getId(), accountName);
+		
+		if (didItWork) {
+			System.out.println("You have deleted " + accountName +"\n");
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean withdraw(String accountName, double amount) {
+		 DecimalFormat df = new DecimalFormat("0.00");
+
+		if (amount > 0) 
+			amount *= -1;
+		
+		boolean worked = accountDao.updateAccount(user.getId(), accountName, amount);
+		
+		if (worked) {
+			transactionDao.insertTransaction(user.getId(), accountName, amount);
+			System.out.println("You have withdrawn " + df.format(amount) + " from " + accountName + "\n");
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean deposit(String accountName, double amount) {
+		 DecimalFormat df = new DecimalFormat("0.00");
+
+		if (amount < 0) {
+			System.out.println("You cannot deposit negative funds\n");
+			return false;
+		}
+		
+		boolean worked = accountDao.updateAccount(user.getId(), accountName, amount);
+		
+		if (worked) {
+			transactionDao.insertTransaction(user.getId(), accountName, amount);
+			System.out.println("You have deposited " + df.format(amount) + " from " + accountName + "\n");
+			return true;
+		}
+		
 		return false;
 	}
 	
 	public boolean accessAccount(String accountName) {
-//		TODO
-		System.out.println("");
+		DecimalFormat df = new DecimalFormat("0.00");
+
+		
+		Account account = accountDao.getAccountById(user.getId(), accountName);
+		
+		if (account != null) {
+			
+			System.out.println("You are now viewing: " + accountName + "\n");
+			System.out.println("\tAmount: " + df.format(account.getAmount()) + "\n");
+			List<Transaction> transactions = transactionDao.getTransactionsByAccountName(accountName);
+			if (!transactions.isEmpty()) {
+				System.out.println("Transaction History: \n");
+				for (Transaction transaction : transactions) {
+					int counter = 1;
+					System.out.println("\tId: " + transaction.getTransactionId() + " | Account Name: " + transaction.getBankAccountName() + " | Amount: " + String.format("%.2f", transaction.getAmount()) + " | Date/Time: " + transaction.getDate() + "\n");
+				}
+			}
+			
+			return true;
+		}
+		
 		return false;
 	}
 	
-	public boolean logOut(String yesOrNo) {
-//		TODO
-		
-		return false;
+	public void viewTransactionHistory() {
+		DecimalFormat df = new DecimalFormat("0.00");
+
+		List<Transaction> transactions = transactionDao.getTransactionHistory(user.getId());
+		if (!transactions.isEmpty()) {
+			System.out.println("Transaction History: \n");
+			for (Transaction transaction : transactions) {
+				System.out.println("\tId: " + transaction.getTransactionId() + " | Account Name: " + transaction.getBankAccountName() + " | Amount: " + df.format(transaction.getAmount()) + " | Date/Time: " + transaction.getDate() + "\n");
+			}
+		}
 	}
 		
 }
 
-//System.out.println("\033[0m BLACK");
-//System.out.println("\033[31m RED");
-//System.out.println("\033[32m GREEN");
-//System.out.println("\033[33m YELLOW");
-//System.out.println("\033[34m BLUE");
-//System.out.println("\033[35m MAGENTA");
-//System.out.println("\033[36m CYAN");
-//System.out.println("\033[37m WHITE");

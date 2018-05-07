@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.Scanner;
 
+import com.Revature.Exceptions.InvalidLoginException;
+import com.Revature.Exceptions.UserDoesNotExistException;
+
 public class Main {
 	
 	public static void main(String[] args) {
@@ -13,16 +16,15 @@ public class Main {
 		
 		String username = null;
 		String password = null;
+		String reEnterPass = null;
 		
 		Login login = null;
 		RegisterUser register;
 		
 		SimpleUser simpleUser = null;
-		SuperUser superUser = null;
+		SuperUser superUser = null;	
 		
-		
-		
-		int option = 0;
+		String option = "";
 		
 		System.out.println("Welcome to the Bank!\n");
 		Scanner sc = new Scanner(System.in);
@@ -40,16 +42,8 @@ public class Main {
 					System.out.println("Enter your password: ");
 					password = sc.nextLine();
 					
+					
 					login = new Login(username, password);
-					
-					try {
-						if (!login.isLoggedIn()) throw new InvalidLoginException();
-						
-					} catch (InvalidLoginException e) {
-						e.getMessage();
-					}
-					
-					if (!login.isLoggedIn()) System.out.println("The username or password entered is incorrect. Please try again.\n");
 					
 				} while (!login.isLoggedIn());
 					
@@ -67,23 +61,20 @@ public class Main {
 						password = sc.nextLine();
 	
 						System.out.println("Re-Enter password");
+						reEnterPass = sc.nextLine();
+						if(!password.equals(reEnterPass)) System.out.println("Passwords must be the same\n");			
 	
-						if(!password.equals(sc.nextLine())) System.out.println("Passwords must be the same\n");			
-	
-					} while(!password.equals(sc.nextLine()));
+					} while(!password.equals(reEnterPass));
 	
 	
 					register = new RegisterUser(username, password);
 	
 					// TODO add to method register.getMessage();
-					if (register.userExist())  System.out.println("The username you entered already exist.");
-	
+//					if (register.userExist())  
+//						System.out.println("The username you entered already exist.\n");
 				} while (register.userExist());
-					
 					register.registerResult();
-					// TODO add this print statement to above method?
-					System.out.println("Account Successfully Created!\n");
-					
+					System.out.println("Account Successfully Created\n");
 					login = new Login(username, password);
 					
 			} else {
@@ -98,8 +89,9 @@ public class Main {
 		else {
 			simpleUser = new SimpleUser(login);
 		}
-			
-		System.out.println("Welcome " + username + "! You have successfully logged in.\n");
+
+
+		System.out.println("\nWelcome " + username + "! You have successfully logged in.\n");
 		
 
 		if (simpleUser != null) {
@@ -110,62 +102,64 @@ public class Main {
 				simpleUser.viewAllAccounts();
 				System.out.println("Type:");
 				System.out.println("\t(1) to create a new account.\n "
-						+ "\t(2) to access an existing account.\n"
-						+ "\t(3) to delete an account that has a balance of 0.00.\n"
-						+ "\t(4) to deposit money in an existing account.\n"
-						+ "\t(5) to withrdraw money from an existing account.\n"
-						+ "\t(6) to view the transaction history of an account.\n"
-						+ "\t(7) to logout.");
-				option = sc.nextInt();
+						+ "\t(2) to delete an account that has a balance of 0.00.\n"
+						+ "\t(3) to deposit money in an existing account.\n"
+						+ "\t(4) to withrdraw money from an existing account.\n"
+						+ "\t(5) to view the transaction history of an account.\n"
+						+ "\t(6) to logout.");
+
+				option = sc.nextLine();
 				
-				int amount = 0;
+
+				
+				String amount = null;
 				String account;
 				//			TODO
 				// try to clear console at this point
-				switch (option){
+				switch (Integer.parseInt(option)){
 
 					case 1:
-						System.out.println("Please enter the name of the account: \n");
-						account = sc.nextLine();
-						//TODO have method print a success or unsuccess
-						simpleUser.createAccount(account);
+						do {
+							System.out.println("Please enter the name of the account: ");
+							account = sc.nextLine();
+						} while (!simpleUser.createAccount(account));
 						break;
 						
 					case 2:
-						System.out.println("Please enter the name of the account you would like to access: \n");
-						account = sc.nextLine();
-						simpleUser.accessAccount(account);
+						do {
+							System.out.println("Please enter the name of the account you would like to delete: ");
+							account = sc.nextLine();
+						} while(simpleUser.deleteAccount(account));
 						break;
 						
 					case 3:
-						System.out.println("Please enter the name of the account you would like to delete: \n");
-						account = sc.nextLine();
-						simpleUser.deleteAccount(account);
+						do {
+							System.out.println("Please enter the name of the account you would deposit money into: ");
+							account = sc.nextLine();
+						} while(!simpleUser.accessAccount(account));
+						
+						System.out.println("Enter the amount you would like to deposit");
+						amount = sc.nextLine();
+						System.out.println("\n");
+						simpleUser.deposit(account, Double.parseDouble(amount));
 						break;
 						
 					case 4:
-						System.out.println("Please enter the name of the account you would deposit money into: \n");
-						account = sc.nextLine();
-						simpleUser.accessAccount(account);
-						System.out.println("Enter the amount you would like to deposit?\n");
-						amount = sc.nextInt();
-						simpleUser.deposit(account, amount);
+						do {
+							System.out.println("Please enter the name of the account you would withdraw money from: ");
+							account = sc.nextLine();
+						} while(simpleUser.accessAccount(account));
+						
+						System.out.println("Enter the amount you would like to withdraw? ");
+						amount = sc.nextLine();
+						simpleUser.withdraw(account, Double.parseDouble(amount));
 						break;
 						
 					case 5:
-						System.out.println("Please enter the name of the account you would withdraw money from: \n");
-						account = sc.nextLine();
-						simpleUser.accessAccount(account);
-						System.out.println("Enter the amount you would like to withdraw?\n");
-						amount = sc.nextInt();
-						simpleUser.withdraw(account, amount);
+						simpleUser.viewTransactionHistory();
 						break;
-						
 					case 6:
-						// view transaction history
-						// simpleUser.viewTransactionHist();
-						break;
-					case 7:
+						System.out.println("\nAre you sure you would like to log out?\n");
 						break;
 					default:
 						System.out.println("Enter a valid option (1-6)");
@@ -174,12 +168,12 @@ public class Main {
 				System.out.println("Type: \n" +
 									"\t(1) to continue to the main screen or \n" +
 									"\t(2) to logout\n");
-				option = sc.nextInt();
+				option = sc.nextLine();
 				System.out.println("---------------------------------------------------------------------\n");
 				
-				if (option == 2) option = 7;
+				if (Integer.parseInt(option) == 2) option = "6";
 				
-			} while (option != 7);
+			} while (Integer.parseInt(option) != 6);
 		} else if (superUser != null) {
 			
 //			TODO
