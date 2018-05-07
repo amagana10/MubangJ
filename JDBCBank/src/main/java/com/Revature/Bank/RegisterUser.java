@@ -21,29 +21,20 @@ public class RegisterUser {
 	}
 		
 	public boolean userExist() {
-		List<User> users = userDao.getUsers();
-		for (User user : users) {
-			if(user.getUsername().equals(username)) {
-				return false;
-			}
+		
+		
+		if(userDao.getUserByName(username) == null) {
+			userDao.insertUser(username, password);
+			System.out.println("Account Successfully Created\n");
+			return false;
 		}
 		
-		userDao.insertUser(username, password);
+		if(userDao.getUserByName(username) != null) {
+			System.out.println("The user already exist\n");
+			return true;
+		}
 		return false;
-//		user = userDao.getUserByName(username);
-//		
-//		if (user == null) {
-//			return true;
-//		}
-//		return false;
+
 	}
-	
-	public String registerResult() {
-		if (userExist()) {
-			return "Account Successfully Created!\n";
-		} else {
-			return "The user already exist";
-		}
-		
-	}
+
 }

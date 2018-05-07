@@ -63,18 +63,14 @@ public class Main {
 						System.out.println("Re-Enter password");
 						reEnterPass = sc.nextLine();
 						if(!password.equals(reEnterPass)) System.out.println("Passwords must be the same\n");			
-	
+						
 					} while(!password.equals(reEnterPass));
 	
 	
 					register = new RegisterUser(username, password);
-	
-					// TODO add to method register.getMessage();
-//					if (register.userExist())  
-//						System.out.println("The username you entered already exist.\n");
+					
 				} while (register.userExist());
-					register.registerResult();
-					System.out.println("Account Successfully Created\n");
+
 					login = new Login(username, password);
 					
 			} else {
@@ -91,7 +87,7 @@ public class Main {
 		}
 
 
-		System.out.println("\nWelcome " + username + "! You have successfully logged in.\n");
+		System.out.println("\nWelcome " + username + " ! You have successfully logged in.\n");
 		
 
 		if (simpleUser != null) {
@@ -113,8 +109,7 @@ public class Main {
 				
 				String amount = null;
 				String account;
-				//			TODO
-				// try to clear console at this point
+
 				switch (Integer.parseInt(option)){
 
 					case 1:
@@ -279,10 +274,12 @@ public class Main {
 											"\t(1) to continue to the main screen or \n" +
 											"\t(2) to logout\n");
 						option = sc.nextLine();
+						
 						System.out.println("---------------------------------------------------------------------\n");
 						
-						
-				
+
+						if (Integer.parseInt(option) == 2) option = "5";
+	
 				} while (Integer.parseInt(option) != 5);
 			}
 			
