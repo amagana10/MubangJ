@@ -7,7 +7,7 @@ import com.Revature.Tables.Employee;
 
 public interface EmployeeDao {
 	
-	List<Employee> getAccounts(int userId);
-	Employee getEmployyById(int userId);
+	List<Employee> getAllEmployees();
+	Employee getEmployeesByDeparmentId(int departmentId);
 	
 }
