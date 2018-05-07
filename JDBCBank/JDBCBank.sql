@@ -52,6 +52,16 @@ FOR EACH ROW
     END;
 /
 
+CREATE OR REPLACE PROCEDURE deleteUserProcedure
+(userId IN NUMBER,username IN VARCHAR2, pass IN VARCHAR2)
+IS
+BEGIN
+  DELETE FROM TRANSACTIONS WHERE USER_ID = userId;  
+  DELETE FROM ACCOUNTS WHERE USER_NAME = username;
+  DELETE FROM USERS WHERE USER_ID = userId;
+END;
+/
+
 insert into users (USER_NAME, USER_PASSWORD, SUPERUSER) values ('user', 'pass', 'n');
 
 

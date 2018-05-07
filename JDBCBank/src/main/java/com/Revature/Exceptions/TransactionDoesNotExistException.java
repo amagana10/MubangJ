@@ -4,7 +4,7 @@ public class TransactionDoesNotExistException extends Exception {
 	
 	public TransactionDoesNotExistException() {
 		
-		super("The transaction you have entered does not exist. Please try again.\n");
+		super("The transaction you have entered does not exist.\n");
 	}
 
 	@Override

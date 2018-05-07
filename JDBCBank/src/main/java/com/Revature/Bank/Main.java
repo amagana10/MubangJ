@@ -52,12 +52,12 @@ public class Main {
 				System.out.println("------register--------\n");
 	
 				do {
-					System.out.println("Enter username");
+					System.out.println("Enter username: ");
 					username = sc.nextLine();
 	
 					do {
 	
-						System.out.println("Enter password");
+						System.out.println("Enter password: ");
 						password = sc.nextLine();
 	
 						System.out.println("Re-Enter password");
