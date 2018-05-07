@@ -50,10 +50,10 @@ public class SuperUser {
 	public boolean updateUser(int userId, String userOrPass, String option) {
 		boolean worked = userDao.updateUser(userId, userOrPass, option);
 		if(worked) {
-			System.out.println("User with id: " + userId + " has been updated. ");
+			System.out.println("\nUser with id: " + userId + " has been updated. ");
 			return true;
 		}
-		System.out.println("Failed to upate user");
+		System.out.println("\nFailed to upate user");
 		return false;
 	}
 	
