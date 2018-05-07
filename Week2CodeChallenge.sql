@@ -142,7 +142,7 @@ BEGIN
     WHERE EMPLOYEE.DEPARTMENT_ID = D_ID;
     COMMIT;
     
-    DBMS_OUTPUT.PUT_LINE('AVG: ' || avgSalary || ' BOOLEAN (1 True, 0 False): ' || doesIdExist);
+    DBMS_OUTPUT.PUT_LINE('AVG: ' || avgSalary || ' | BOOLEAN: (1 True, 0 False): ' || doesIdExist);
 END;
 / 
 

@@ -101,7 +101,7 @@ public class Main {
 				simpleUser.viewAllAccounts();
 				System.out.println("Type:");
 				System.out.println("\t(1) to create a new account.\n "
-						+ "\t(2) to delete an account that has a balance of 0.00.\n"
+						+ "\t(2) to delete an account that has a balance of $0.00.\n"
 						+ "\t(3) to deposit money in an existing account.\n"
 						+ "\t(4) to withrdraw money from an existing account.\n"
 						+ "\t(5) to view the transaction history of an account.\n"
@@ -178,7 +178,7 @@ public class Main {
 				if (superUser != null) {
 				
 					System.out.println("You are a super user\n");
-					System.out.println("Commands: view, create, update, or delete all users ");
+					System.out.println("Commands: view, create, update, or delete all users \n");
 					
 					do {
 						
@@ -194,9 +194,7 @@ public class Main {
 						
 						String userIdStr = null;
 						int userId = -1;
-						String account;
-						//			TODO
-						// try to clear console at this point
+
 						do {
 							
 							switch (Integer.parseInt(option)){
@@ -205,7 +203,6 @@ public class Main {
 									superUser.viewAllUsers();
 									break;	
 								case 3:
-									do {
 										System.out.println("You are attempting to update an existing user. \n");
 										
 										System.out.println("Please enter the userId (Must be an integer): ");
@@ -221,78 +218,48 @@ public class Main {
 											  }  
 										} while (userId == -1);
 										
-										int userOrPassOption = 0;
+										int fieldToChangeOption = 0;
 										do {
 											System.out.println("Would you like to update the username (1) or password (2) ? ");
-											userOrPassOption = Integer.parseInt(sc.next());
+											fieldToChangeOption = Integer.parseInt(sc.nextLine());
 											
-											if (userOrPassOption != 1 || userOrPassOption != 2)
+											if (fieldToChangeOption != 1 && fieldToChangeOption != 2)
 												System.out.println("Enter (1) for username or (2) for password");
 
-										} while(userOrPassOption != 1 || userOrPassOption != 2);
-										
-										String userOrPass = null;
-										if (userOrPassOption == 1) {
-											userOrPass = "username";
-										} else {
-											userOrPass = "password";
-										}
+										} while(fieldToChangeOption != 1 && fieldToChangeOption != 2);
 										
 										String fieldToChange = null;
-
-										do {
-
-											System.out.println("Are you attempting to change your username (1) or password (2) ? ");
-											fieldToChange = sc.nextLine();
-											
-											if (!fieldToChange.equals("1") || !fieldToChange.equals("2"))
-												System.out.println("Enter (1) for username or (2) for password");
-
-										} while(fieldToChange.equals("1") || fieldToChange.equals("2"));
-										
-										if (fieldToChange.equals("1")) {
+										if (fieldToChangeOption == 1) {
 											fieldToChange = "username";
-											
 										} else {
 											fieldToChange = "password";
 										}
+										String userOrPass;
+
+										System.out.println("What would you like to change userId: " + userId + ", " + fieldToChange + " to: ");
+										userOrPass = sc.nextLine();
 										
-										superUser.updateUser(userId, userOrPass, fieldToChange);
-									} while(simpleUser.deleteAccount(account));
+									superUser.updateUser(userId, userOrPass, fieldToChange);
 									break;
 									
 								case 2:
 									System.out.println("You are now creating a new user.");
-									System.out.println("Please enter the name of the user");
+									
+									System.out.println("Please enter the name of the user: ");
 									String username1 = sc.nextLine();
 									
 									System.out.println("Please enter the name of the password");
-									String password2 = sc.nextLine();
+									String password1 = sc.nextLine();
 									
-									if (username1.contains("\\s+") || password2.matches("\\s+")) {
-										System.out.println("");
-									}
-									superUser.createUser(username1, password2);
-									do {
-										System.out.println("Please enter the name of the account you would deposit money into: ");
-										account = sc.nextLine();
-									} while(!simpleUser.accessAccount(account));
+									superUser.createUser(username1, password1);
 									
-									System.out.println("Enter the amount you would like to deposit");
-									amount = sc.nextLine();
-									System.out.println("\n");
-									simpleUser.deposit(account, Double.parseDouble(amount));
 									break;
 									
 								case 4:
-									do {
-										System.out.println("Please enter the name of the account you would withdraw money from: ");
-										account = sc.nextLine();
-									} while(simpleUser.accessAccount(account));
-									
-									System.out.println("Enter the amount you would like to withdraw? ");
-									amount = sc.nextLine();
-									simpleUser.withdraw(account, Double.parseDouble(amount));
+
+									System.out.println("Please enter an user id" );
+									String userId2 = sc.nextLine();
+									superUser.deleteUser(Integer.parseInt(userId2));
 									break;
 	
 								case 5:
@@ -300,6 +267,10 @@ public class Main {
 									break;
 								default:
 									System.out.println("Enter a valid option (1-5)");
+							}
+							
+							if (Integer.parseInt(option) >=1 && Integer.parseInt(option) <= 5) {
+								break;
 							}
 						} while(Integer.parseInt(option) >=1 && Integer.parseInt(option) <= 5);
 

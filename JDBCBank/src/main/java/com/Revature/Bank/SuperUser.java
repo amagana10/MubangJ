@@ -57,7 +57,7 @@ public class SuperUser {
 		return false;
 	}
 	
-	public boolean deleteUser(String accountName, int userId) {
+	public boolean deleteUser(int userId) {
 		
 		deleteTransactions(userId);
 		deleteAccounts(userId);

@@ -31,7 +31,7 @@ public class SimpleUser {
 	}
 
 	public void viewAllAccounts() {
-		 DecimalFormat df = new DecimalFormat("#.00");
+		 DecimalFormat df = new DecimalFormat("0.00");
 		
 		List<Account> accounts = accountDao.getAccounts(user.getId());
 		for (Account account: accounts) {
@@ -59,6 +59,8 @@ public class SimpleUser {
 		if (didItWork) {
 			System.out.println("You have deleted " + accountName +"\n");
 			return true;
+		} else {
+			System.out.println("Could not delete this account.\n");
 		}
 		
 		return false;
