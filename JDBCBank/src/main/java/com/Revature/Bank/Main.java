@@ -9,7 +9,6 @@ import com.Revature.Exceptions.InvalidLoginException;
 import com.Revature.Exceptions.UserDoesNotExistException;
 
 public class Main {
-	// 109 BankClient pass
 
 	public static void main(String[] args) {
 		
