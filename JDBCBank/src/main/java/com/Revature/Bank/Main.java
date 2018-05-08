@@ -9,7 +9,8 @@ import com.Revature.Exceptions.InvalidLoginException;
 import com.Revature.Exceptions.UserDoesNotExistException;
 
 public class Main {
-	
+	// 109 BankClient pass
+
 	public static void main(String[] args) {
 		
 		String yesOrNo = null;
@@ -123,7 +124,7 @@ public class Main {
 						do {
 							System.out.println("Please enter the name of the account you would like to delete: ");
 							account = sc.nextLine();
-						} while(simpleUser.deleteAccount(account));
+						} while(!simpleUser.deleteAccount(account));
 						break;
 						
 					case 3:
@@ -142,7 +143,7 @@ public class Main {
 						do {
 							System.out.println("Please enter the name of the account you would withdraw money from: ");
 							account = sc.nextLine();
-						} while(simpleUser.accessAccount(account));
+						} while(!simpleUser.accessAccount(account));
 						
 						System.out.println("Enter the amount you would like to withdraw? ");
 						amount = sc.nextLine();
@@ -283,8 +284,9 @@ public class Main {
 				} while (Integer.parseInt(option) != 5);
 			}
 			
-		System.out.println("You have successfully logged out!");
+		
 	}
+		System.out.println("You have successfully logged out!");
 	}
 	
 }			
